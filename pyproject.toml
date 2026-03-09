@@ -1,0 +1,7 @@
+[project]
+name = "documind"
+version = "0.1.0"
+description = "Production RAG system for private document intelligence — hybrid retrieval, parent-child chunking, streaming answers with citations, and automated RAGAS evaluation CI/CD gate."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
