@@ -1,5 +1,12 @@
 from unstructured.partition.auto import partition
 from unstructured.documents.elements import Element
+from pathlib import Path
+
+SUPPORTED_EXTENSIONS = {".pdf", ".doc", ".docx", ".html"}
+
+
+def _is_file_supported(file_path: str) -> bool:
+    return Path(file_path).suffix.lower() in SUPPORTED_EXTENSIONS
 
 
 def parse_document(file_path: str) -> list[Element]:
@@ -13,19 +20,20 @@ def parse_document(file_path: str) -> list[Element]:
         A list of Element objects extracted from the document.
 
     Raises:
-        ValueError: If file_path is empty, or the file type is unsupported or cannot be detected.
+        ValueError: If file_path is empty or the file type is not supported.
         FileNotFoundError: If the file does not exist at the given path.
         RuntimeError: If the file is corrupt or fails during partitioning.
     """
     if not file_path:
         raise ValueError("file_path must not be empty.")
 
+    if not _is_file_supported(file_path):
+        raise ValueError(f"Unsupported file extension for '{file_path}'. Supported: {', '.join(SUPPORTED_EXTENSIONS)}")
+
     try:
         elements = partition(filename=file_path)
     except FileNotFoundError:
         raise
-    except ValueError as e:
-        raise ValueError(f"Unsupported or undetectable file type for '{file_path}': {e}")
     except Exception as e:
         raise RuntimeError(f"Failed to parse document '{file_path}': {e}")
 
