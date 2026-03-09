@@ -6,4 +6,5 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "pydantic-settings>=2.13.1",
+    "unstructured>=0.21.5",
 ]
