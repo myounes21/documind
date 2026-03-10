@@ -8,8 +8,8 @@ class ChunkMetadata(BaseModel):
     filetype: str
 
 class Chunk(BaseModel):
-    chunk_id: str
-    parent_id: Optional[str] = None
     text: str
-    metadata: ChunkMetadata
+    chunk_id: str
     is_parent: bool
+    metadata: ChunkMetadata
+    parent_id: Optional[str] = None
