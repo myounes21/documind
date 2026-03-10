@@ -29,6 +29,13 @@ class Settings(BaseSettings):
     langfuse_host: str = "localhost"
     langfuse_port: int = 3000
 
+    # chunker configs
+    parent_tokens_min: int = 500
+    parent_tokens_max: int = 1000
+    child_tokens_min: int = 100
+    child_tokens_max: int = 200
+
+
     app_env: str = "development"
 
 settings = Settings()
