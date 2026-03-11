@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     redis_host: str = "localhost"
     redis_port: int = 6379
 
+
     # Langfuse
     langfuse_public_key: str = ""
     langfuse_secret_key: str = ""
@@ -30,10 +31,8 @@ class Settings(BaseSettings):
     langfuse_port: int = 3000
 
     # chunker configs
-    parent_tokens_min: int = 500
-    parent_tokens_max: int = 1000
-    child_tokens_min: int = 100
-    child_tokens_max: int = 200
+    parent_chunk_size: int = 1500
+    child_chunk_size: int = 150
 
 
     app_env: str = "development"
