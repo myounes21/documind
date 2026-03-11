@@ -13,3 +13,5 @@ class Chunk(BaseModel):
     is_parent: bool
     parent_id: Optional[str] = None
     metadata: ChunkMetadata
+
+    vector: Optional[list[float]] = None
