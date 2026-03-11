@@ -11,5 +11,5 @@ class Chunk(BaseModel):
     text: str
     chunk_id: str
     is_parent: bool
-    metadata: ChunkMetadata
     parent_id: Optional[str] = None
+    metadata: ChunkMetadata
