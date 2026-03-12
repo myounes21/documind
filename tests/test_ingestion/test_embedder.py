@@ -1,5 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
+from uuid import uuid4
 from ingestion.embedder import (
     _openai_embed_texts,
     _cohere_embed_texts,
@@ -17,7 +18,7 @@ from ingestion.schemas import Chunk, ChunkMetadata
 def _make_chunk(text: str = "some text", vector=None):
     return Chunk(
         text=text,
-        chunk_id="chunk-1",
+        chunk_id=uuid4(),
         is_parent=True,
         metadata=ChunkMetadata(
             filename="test.pdf",

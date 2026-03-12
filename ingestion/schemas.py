@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from uuid import UUID
 
 
 class ChunkMetadata(BaseModel):
@@ -9,9 +10,9 @@ class ChunkMetadata(BaseModel):
 
 class Chunk(BaseModel):
     text: str
-    chunk_id: str
+    chunk_id: UUID
     is_parent: bool
-    parent_id: Optional[str] = None
+    parent_id: Optional[UUID] = None
     metadata: ChunkMetadata
 
     vector: Optional[list[float]] = None

@@ -3,6 +3,7 @@ from unstructured.documents.elements import Element
 import tiktoken
 from config import settings
 import uuid
+from uuid import UUID
 from typing import Optional
 
 ENCODER = tiktoken.get_encoding("cl100k_base")
@@ -14,12 +15,12 @@ def _count_tokens(text: str) -> int:
 def _build_chunk(
         text: str,
         chunk_metadata: ChunkMetadata,
-        parent_id: Optional[str] = None,
+        parent_id: Optional[UUID] = None,
         is_parent: bool = True
 ) -> Chunk:
     return Chunk(
         text=text,
-        chunk_id=str(uuid.uuid4()),
+        chunk_id=uuid.uuid4(),
         parent_id=parent_id,
         is_parent=is_parent,
         metadata=chunk_metadata

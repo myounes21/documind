@@ -1,5 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
+from uuid import UUID, uuid4
 from ingestion.chunker import (
     _count_tokens,
     _build_chunk,
@@ -30,7 +31,7 @@ def _make_chunk(text: str, is_parent=True, parent_id=None):
     """Create a real Chunk for use in chunk_children tests."""
     return Chunk(
         text=text,
-        chunk_id="parent-id-123",
+        chunk_id=uuid4(),
         is_parent=is_parent,
         parent_id=parent_id,
         metadata=ChunkMetadata(
@@ -122,14 +123,20 @@ class TestBuildChunk:
 
     def test_child_chunk(self):
         metadata = ChunkMetadata(filename="f", filetype="t", page_number=1)
-        chunk = _build_chunk("text", metadata, parent_id="p-123", is_parent=False)
+        parent_id = uuid4()
+        chunk = _build_chunk("text", metadata, parent_id=parent_id, is_parent=False)
         assert chunk.is_parent is False
-        assert chunk.parent_id == "p-123"
+        assert chunk.parent_id == parent_id
 
     def test_returns_chunk_instance(self):
         metadata = ChunkMetadata(filename="f", filetype="t", page_number=1)
         chunk = _build_chunk("text", metadata)
         assert isinstance(chunk, Chunk)
+
+    def test_chunk_id_is_uuid(self):
+        metadata = ChunkMetadata(filename="f", filetype="t", page_number=1)
+        chunk = _build_chunk("text", metadata)
+        assert isinstance(chunk.chunk_id, UUID)
 
 
 # ── _split_text ──────────────────────────────────────────────────
