@@ -37,7 +37,7 @@ def _build_metadata(element: Element) -> ChunkMetadata:
 def _exceeds_token_limit(text: str) -> bool:
     return _count_tokens(text) > settings.parent_chunk_size
 
-def _split_text(text: str, size: int = settings.parent_chunk_size) -> list[str]:
+def _split_text(text: str, size: int) -> list[str]:
     segments = []
     token_ids = ENCODER.encode(text)
 
@@ -68,7 +68,7 @@ def chunk_parent(elements: list[Element]) -> list[Chunk]:
             anchor_element = element
 
         # split if text oversized
-        text_segments = _split_text(element.text) if _exceeds_token_limit(element.text) else [element.text]
+        text_segments = _split_text(element.text, settings.parent_chunk_size) if _exceeds_token_limit(element.text) else [element.text]
         for segment in text_segments:
             buffer_text += ("\n\n" if buffer_text else "") + segment
             buffer_text, chunk = _flush_buffer(buffer_text, anchor_element)
