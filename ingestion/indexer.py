@@ -6,6 +6,8 @@ from elasticsearch.helpers import bulk
 
 
 def store_in_qdrant(chunks: list[Chunk]) -> None:
+    if not chunks:
+        return
 
     if any(chunk.vector is None for chunk in chunks):
         raise ValueError("all chunks must have a vector before indexing")
@@ -21,10 +23,9 @@ def store_in_qdrant(chunks: list[Chunk]) -> None:
                 "page_number": chunk.metadata.page_number,
                 "is_parent": chunk.is_parent,
                 "parent_id": chunk.parent_id,
-            }
+            },
         )
-        for chunk in chunks  # same as -> points = [PointStruct(...) for chunk in chunks]
-
+        for chunk in chunks
     ]
 
     qdrant_client.upsert(
@@ -34,8 +35,8 @@ def store_in_qdrant(chunks: list[Chunk]) -> None:
 
 
 def store_in_elasticsearch(chunks: list[Chunk]) -> None:
-    if any(chunk.text is None for chunk in chunks):
-        raise ValueError("all chunks must have a text before indexing")
+    if not chunks:
+        return
 
     actions = [
         {
@@ -48,7 +49,7 @@ def store_in_elasticsearch(chunks: list[Chunk]) -> None:
                 "page_number": chunk.metadata.page_number,
                 "is_parent": chunk.is_parent,
                 "parent_id": chunk.parent_id,
-            }
+            },
         }
         for chunk in chunks
     ]
