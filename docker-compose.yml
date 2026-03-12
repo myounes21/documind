@@ -8,12 +8,15 @@ services:
     volumes:
       - ./data/qdrant:/qdrant/storage
 
-  # elasticsearch_db:
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
-  #   ports:
-  #     - 9200:9200
-  #   environment:
-  #     - discovery.type=single-node  #run as a single node
-  #     - xpack.security.enabled=false  # disable security
-  #   volumes:
-  #     - ./data/elasticsearch:/usr/share/elasticsearch/data
+  elasticsearch_db:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    container_name: elastic-search
+    ports:
+      - 9200:9200
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
