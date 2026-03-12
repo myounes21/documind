@@ -2,6 +2,7 @@ from functools import cache
 
 from .schemas import Chunk
 from config import settings
+from typing import Literal
 
 
 @cache
@@ -32,11 +33,13 @@ def _openai_embed_texts(texts: list[str]) -> list[list[float]]:
 
 
 # Cohere
-def _cohere_embed_texts(texts: list[str]) -> list[list[float]]:
+CohereInputType = Literal["search_document", "search_query"]
+
+def _cohere_embed_texts(texts: list[str], input_type: CohereInputType = "search_document") -> list[list[float]]:
     response = _get_cohere_client().embed(
         texts=texts,
         model=settings.cohere_embedding_model,
-        input_type="search_document",
+        input_type=input_type,
         embedding_types=["float"]
     )
     return response.embeddings.float
@@ -54,12 +57,12 @@ _PROVIDERS = {
 }
 _BATCH_LIMITS = {
     "openai": 2048,
-    "cohere": 96,    
-    "hf": 256,       # depends on GPU memory
+    "cohere": 96,
+    "hf": settings.huggingface_batch_size,
 }
 
 
-def embed(chunks: list[Chunk]) -> list[Chunk]:
+def embed_document(chunks: list[Chunk]) -> list[Chunk]:
     if not chunks:
         raise ValueError("chunks must not be empty")
 
@@ -82,3 +85,17 @@ def embed(chunks: list[Chunk]) -> list[Chunk]:
         embedded_chunks.append(chunk)
 
     return embedded_chunks
+
+
+def embed_query(text: str) -> list[float]:
+    if settings.embedding_provider == "cohere":
+        return _cohere_embed_texts([text], input_type="search_query")[0]
+
+    embed_fn = _PROVIDERS.get(settings.embedding_provider)
+    if embed_fn is None:
+        raise ValueError(
+            f"Unknown embedding provider: '{settings.embedding_provider}'. "
+            f"Must be one of: {list(_PROVIDERS.keys())}"
+        )
+
+    return embed_fn([text])[0]

@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     huggingface_embedding_dimensions: int = 768
 
     embedding_provider: Literal["openai", "cohere", "hf"] = "cohere"
+    huggingface_batch_size: int = 256
 
     # Qdrant
     qdrant_host: str = "localhost"
