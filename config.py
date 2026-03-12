@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     elasticsearch_host: str
     elasticsearch_port: int
     elasticsearch_password: str = ""
+    elasticsearch_index_name: str = "chunks"
 
     # Redis
     redis_host: str
