@@ -28,23 +28,23 @@ class Settings(BaseSettings):
     huggingface_batch_size: int = 256
 
     # Qdrant
-    qdrant_host: str = "localhost"
-    qdrant_port: int = 6333
+    qdrant_host: str
+    qdrant_port: int
 
     # Elasticsearch
-    elasticsearch_host: str = "localhost"
-    elasticsearch_port: int = 9200
+    elasticsearch_host: str
+    elasticsearch_port: int
     elasticsearch_password: str = ""
 
     # Redis
-    redis_host: str = "localhost"
-    redis_port: int = 6379
+    redis_host: str
+    redis_port: int
 
     # Langfuse
     langfuse_public_key: str
     langfuse_secret_key: str
-    langfuse_host: str = "localhost"
-    langfuse_port: int = 3000
+    langfuse_host: str
+    langfuse_port: int
 
     # chunker configs
     parent_chunk_size: int = 1500
