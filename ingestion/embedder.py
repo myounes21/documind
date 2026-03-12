@@ -1,35 +1,25 @@
+from functools import cache
+
 from .schemas import Chunk
 from config import settings
 
 
-# lazy load all clients
-_openai_client = None
-_cohere_client = None
-_hf_client = None
-
-
+@cache
 def _get_openai_client():
-    global _openai_client
-    if _openai_client is None:
-        from openai import OpenAI
-        _openai_client = OpenAI(api_key=settings.openai_api_key)
-    return _openai_client
+    from openai import OpenAI
+    return OpenAI(api_key=settings.openai_api_key)
 
 
+@cache
 def _get_cohere_client():
-    global _cohere_client
-    if _cohere_client is None:
-        import cohere
-        _cohere_client = cohere.Client(api_key=settings.cohere_api_key)
-    return _cohere_client
+    import cohere
+    return cohere.Client(api_key=settings.cohere_api_key)
 
 
-def _get_hf_client():
-    global _hf_client
-    if _hf_client is None:
-        from sentence_transformers import SentenceTransformer
-        _hf_client = SentenceTransformer(settings.huggingface_embedding_model)
-    return _hf_client
+@cache
+def _get_huggingface_client():
+    from sentence_transformers import SentenceTransformer
+    return SentenceTransformer(settings.huggingface_embedding_model)
 
 
 # OpenAI
@@ -54,8 +44,41 @@ def _cohere_embed_texts(texts: list[str]) -> list[list[float]]:
 
 # HuggingFace
 def _huggingface_embed_texts(texts: list[str]) -> list[list[float]]:
-    model = _get_hf_client()
-    return model.encode(texts).tolist()
+    return _get_huggingface_client().encode(texts).tolist()
 
 
+_PROVIDERS = {
+    "openai": _openai_embed_texts,
+    "cohere": _cohere_embed_texts,
+    "hf": _huggingface_embed_texts,
+}
+_BATCH_LIMITS = {
+    "openai": 2048,
+    "cohere": 96,    
+    "hf": 256,       # depends on GPU memory
+}
 
+
+def embed(chunks: list[Chunk]) -> list[Chunk]:
+    if not chunks:
+        raise ValueError("chunks must not be empty")
+
+    embed_fn = _PROVIDERS.get(settings.embedding_provider)
+    if embed_fn is None:
+        raise ValueError(
+            f"Unknown embedding provider: '{settings.embedding_provider}'. "
+            f"Must be one of: {list(_PROVIDERS.keys())}"
+        )
+
+    texts = [chunk.text for chunk in chunks]
+    batch_size = _BATCH_LIMITS[settings.embedding_provider]
+    embeddings = []
+    for i in range(0, len(texts), batch_size):
+        embeddings.extend(embed_fn(texts[i:i + batch_size]))
+
+    embedded_chunks = []
+    for i, vector in enumerate(embeddings):
+        chunk = chunks[i].model_copy(update={"vector": vector})
+        embedded_chunks.append(chunk)
+
+    return embedded_chunks

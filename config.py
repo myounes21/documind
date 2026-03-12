@@ -39,7 +39,6 @@ class Settings(BaseSettings):
     redis_host: str = "localhost"
     redis_port: int = 6379
 
-
     # Langfuse
     langfuse_public_key: str
     langfuse_secret_key: str
