@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     # Qdrant
     qdrant_host: str
     qdrant_port: int
+    qdrant_collection_name: str = "chunks"
 
     # Elasticsearch
     elasticsearch_host: str
