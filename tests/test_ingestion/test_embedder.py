@@ -318,3 +318,4 @@ class TestEmbedQueryInvalidInput:
         monkeypatch.setattr("ingestion.embedder.settings.embedding_provider", "bad")
         with pytest.raises(ValueError, match="Must be one of"):
             embed_query("test")
+    
