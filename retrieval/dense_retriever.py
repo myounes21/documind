@@ -2,7 +2,7 @@ from config import settings
 from schemas import RetrievedChunk, ChunkMetadata
 from db_setup import qdrant_client as client
 
-def qdrant_retrieve(query_vector: list[float], top_k: int) -> list[RetrievedChunk]:
+def dense_retrieve(query_vector: list[float], top_k: int) -> list[RetrievedChunk]:
     results = client.search(
         collection_name=settings.qdrant_collection_name,
         query_vector=query_vector,

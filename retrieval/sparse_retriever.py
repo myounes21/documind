@@ -3,7 +3,7 @@ from schemas import RetrievedChunk, ChunkMetadata
 from db_setup import elastic_client as client
 
 
-def elastic_retrieve(query_text: str, top_k: int) -> list[RetrievedChunk]:
+def sparse_retrieve(query_text: str, top_k: int) -> list[RetrievedChunk]:
     results = client.search(
         index=settings.elasticsearch_index_name,
         body={
