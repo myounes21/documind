@@ -21,7 +21,6 @@ def store_in_qdrant(chunks: list[Chunk]) -> None:
                 "filename": chunk.metadata.filename,
                 "filetype": chunk.metadata.filetype,
                 "page_number": chunk.metadata.page_number,
-                "is_parent": chunk.is_parent,
                 "parent_id": chunk.parent_id,
             },
         )
@@ -47,7 +46,6 @@ def store_in_elasticsearch(chunks: list[Chunk]) -> None:
                 "filename": chunk.metadata.filename,
                 "filetype": chunk.metadata.filetype,
                 "page_number": chunk.metadata.page_number,
-                "is_parent": chunk.is_parent,
                 "parent_id": chunk.parent_id,
             },
         }

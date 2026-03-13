@@ -20,7 +20,6 @@ class Chunk(BaseModel):
 class RetrievedChunk(BaseModel):
     text: str
     chunk_id: UUID
-    is_parent: bool
     metadata: ChunkMetadata
     parent_id: Optional[UUID] = None
     vector: Optional[list[float]] = None

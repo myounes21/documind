@@ -7,7 +7,7 @@ from ingestion.embedder import (
     _huggingface_embed_texts,
     _PROVIDERS,
     _BATCH_LIMITS,
-    embed_document,
+    embed_chunks,
     embed_query,
 )
 from schemas import Chunk, ChunkMetadata
@@ -194,7 +194,7 @@ class TestEmbedDocumentValidInput:
         monkeypatch.setattr("ingestion.embedder._PROVIDERS", {"openai": _fake_embed_fn})
         monkeypatch.setattr("ingestion.embedder._BATCH_LIMITS", {"openai": 2048})
         chunks = _make_chunks(3)
-        result = embed_document(chunks)
+        result = embed_chunks(chunks)
         assert len(result) == 3
         for chunk in result:
             assert chunk.vector is not None
@@ -204,7 +204,7 @@ class TestEmbedDocumentValidInput:
         monkeypatch.setattr("ingestion.embedder._PROVIDERS", {"openai": _fake_embed_fn})
         monkeypatch.setattr("ingestion.embedder._BATCH_LIMITS", {"openai": 2048})
         chunks = _make_chunks(2)
-        result = embed_document(chunks)
+        result = embed_chunks(chunks)
         for original in chunks:
             assert original.vector is None
         for embedded in result:
@@ -215,7 +215,7 @@ class TestEmbedDocumentValidInput:
         monkeypatch.setattr("ingestion.embedder._PROVIDERS", {"openai": _fake_embed_fn})
         monkeypatch.setattr("ingestion.embedder._BATCH_LIMITS", {"openai": 2048})
         chunks = _make_chunks(2)
-        result = embed_document(chunks)
+        result = embed_chunks(chunks)
         for i, chunk in enumerate(result):
             assert chunk.text == chunks[i].text
 
@@ -224,7 +224,7 @@ class TestEmbedDocumentValidInput:
         monkeypatch.setattr("ingestion.embedder._PROVIDERS", {"openai": _fake_embed_fn})
         monkeypatch.setattr("ingestion.embedder._BATCH_LIMITS", {"openai": 2048})
         chunks = _make_chunks(1)
-        result = embed_document(chunks)
+        result = embed_chunks(chunks)
         assert result[0].metadata == chunks[0].metadata
         assert result[0].chunk_id == chunks[0].chunk_id
 
@@ -242,7 +242,7 @@ class TestEmbedDocumentBatching:
         monkeypatch.setattr("ingestion.embedder._PROVIDERS", {"openai": tracking_embed_fn})
         monkeypatch.setattr("ingestion.embedder._BATCH_LIMITS", {"openai": 3})
         chunks = _make_chunks(7)
-        result = embed_document(chunks)
+        result = embed_chunks(chunks)
 
         assert len(result) == 7
         assert call_log == [3, 3, 1]
@@ -258,7 +258,7 @@ class TestEmbedDocumentBatching:
         monkeypatch.setattr("ingestion.embedder._PROVIDERS", {"openai": tracking_embed_fn})
         monkeypatch.setattr("ingestion.embedder._BATCH_LIMITS", {"openai": 100})
         chunks = _make_chunks(5)
-        embed_document(chunks)
+        embed_chunks(chunks)
 
         assert call_log == [5]
 
@@ -267,19 +267,19 @@ class TestEmbedDocumentInvalidInput:
 
     def test_empty_list_raises_value_error(self):
         with pytest.raises(ValueError, match="chunks must not be empty"):
-            embed_document([])
+            embed_chunks([])
 
     def test_unknown_provider_raises_value_error(self, monkeypatch):
         monkeypatch.setattr("ingestion.embedder.settings.embedding_provider", "nonexistent")
         chunks = _make_chunks(1)
         with pytest.raises(ValueError, match="Unknown embedding provider"):
-            embed_document(chunks)
+            embed_chunks(chunks)
 
     def test_error_message_includes_provider_name(self, monkeypatch):
         monkeypatch.setattr("ingestion.embedder.settings.embedding_provider", "bad_provider")
         chunks = _make_chunks(1)
         with pytest.raises(ValueError, match="bad_provider"):
-            embed_document(chunks)
+            embed_chunks(chunks)
 
 
 # ── embed_query ──────────────────────────────────────────────────

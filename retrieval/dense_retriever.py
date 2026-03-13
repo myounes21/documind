@@ -14,7 +14,6 @@ def retrieve_dense(query_vector: list[float], top_k: int) -> list[RetrievedChunk
             chunk_id=point.id,
             text=point.payload["text"],
             score=point.score,
-            is_parent=point.payload["is_parent"],
             metadata=ChunkMetadata(
                 filename=point.payload["filename"],
                 filetype=point.payload["filetype"],

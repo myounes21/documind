@@ -62,7 +62,7 @@ _BATCH_LIMITS = {
 }
 
 
-def embed_document(chunks: list[Chunk]) -> list[Chunk]:
+def embed_chunks(chunks: list[Chunk]) -> list[Chunk]:
     if not chunks:
         raise ValueError("chunks must not be empty")
 
