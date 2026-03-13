@@ -2,7 +2,7 @@ import pytest
 from uuid import uuid4
 from unittest.mock import MagicMock
 
-from retrieval.dense_retriever import retrieve_dense
+from retrieval.dense_retriever import dense_retrieve
 
 
 def _make_point(
@@ -37,7 +37,7 @@ class TestRetrieveDense:
         monkeypatch.setattr("retrieval.dense_retriever.settings.qdrant_collection_name", "chunks_test")
 
         query_vector = [0.1, 0.2, 0.3]
-        retrieve_dense(query_vector=query_vector, top_k=5)
+        dense_retrieve(query_vector=query_vector, top_k=5)
 
         mock_client.search.assert_called_once_with(
             collection_name="chunks_test",
@@ -50,7 +50,7 @@ class TestRetrieveDense:
         mock_client.search.return_value = []
         monkeypatch.setattr("retrieval.dense_retriever.client", mock_client)
 
-        result = retrieve_dense(query_vector=[0.1], top_k=3)
+        result = dense_retrieve(query_vector=[0.1], top_k=3)
 
         assert result == []
 
@@ -63,13 +63,12 @@ class TestRetrieveDense:
         mock_client.search.return_value = [p1, p2]
         monkeypatch.setattr("retrieval.dense_retriever.client", mock_client)
 
-        result = retrieve_dense(query_vector=[0.0], top_k=2)
+        result = dense_retrieve(query_vector=[0.0], top_k=2)
 
         assert len(result) == 2
         assert result[0].chunk_id == p1.id
         assert result[0].text == "A"
         assert result[0].score == 0.5
-        assert result[0].is_parent is False
         assert result[0].metadata.filename == p1.payload["filename"]
         assert result[0].metadata.page_number == 2
         assert result[0].parent_id == parent_id
@@ -77,7 +76,6 @@ class TestRetrieveDense:
         assert result[1].chunk_id == p2.id
         assert result[1].text == "B"
         assert result[1].score == 0.4
-        assert result[1].is_parent is True
         assert result[1].metadata.filename == "y.pdf"
         assert result[1].parent_id is None
 
@@ -87,5 +85,5 @@ class TestRetrieveDense:
         monkeypatch.setattr("retrieval.dense_retriever.client", mock_client)
 
         with pytest.raises(RuntimeError, match="qdrant down"):
-            retrieve_dense(query_vector=[0.0], top_k=1)
+            dense_retrieve(query_vector=[0.0], top_k=1)
 

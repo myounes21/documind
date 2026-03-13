@@ -27,6 +27,12 @@ class Settings(BaseSettings):
     embedding_provider: Literal["openai", "cohere", "hf"] = "cohere"
     huggingface_batch_size: int = 256
 
+    # Reranker
+    cohere_reranker_model: str = "rerank-english-v3.0"
+    huggingface_reranker_model: str = "BAAI/bge-reranker-base"
+    rerank_provider: Literal["cohere", "hf"] = "cohere"
+
+
     # Qdrant
     qdrant_host: str
     qdrant_port: int
