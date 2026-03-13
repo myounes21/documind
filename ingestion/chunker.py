@@ -1,10 +1,12 @@
-from .schemas import Chunk, ChunkMetadata
-from unstructured.documents.elements import Element
-import tiktoken
-from config import settings
-import uuid
-from uuid import UUID
 from typing import Optional
+from uuid import UUID
+import uuid
+
+import tiktoken
+from unstructured.documents.elements import Element
+
+from config import settings
+from schemas import Chunk, ChunkMetadata
 
 ENCODER = tiktoken.get_encoding("cl100k_base")
 

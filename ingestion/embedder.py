@@ -1,8 +1,8 @@
 from functools import cache
-
-from .schemas import Chunk
-from config import settings
 from typing import Literal
+
+from config import settings
+from schemas import Chunk
 
 
 @cache

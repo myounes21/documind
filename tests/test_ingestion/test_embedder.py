@@ -10,7 +10,7 @@ from ingestion.embedder import (
     embed_document,
     embed_query,
 )
-from ingestion.schemas import Chunk, ChunkMetadata
+from schemas import Chunk, ChunkMetadata
 
 
 # ── helpers ──────────────────────────────────────────────────────

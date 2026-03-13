@@ -1,7 +1,7 @@
 from config import settings
-from .schemas import Chunk
+from schemas import Chunk
 from qdrant_client.models import PointStruct
-from .store_setup import qdrant_client, elastic_client
+from db_setup import qdrant_client, elastic_client
 from elasticsearch.helpers import bulk
 
 

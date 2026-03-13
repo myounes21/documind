@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from uuid import uuid4
 
 from ingestion.indexer import store_in_elasticsearch, store_in_qdrant
-from ingestion.schemas import Chunk, ChunkMetadata
+from schemas import Chunk, ChunkMetadata
 
 
 def _make_metadata(filename: str = "test.pdf", filetype: str = "application/pdf", page_number: int = 1):

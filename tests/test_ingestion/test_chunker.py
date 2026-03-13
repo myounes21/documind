@@ -12,7 +12,7 @@ from ingestion.chunker import (
     chunk_children,
     ENCODER,
 )
-from ingestion.schemas import Chunk, ChunkMetadata
+from schemas import Chunk, ChunkMetadata
 
 
 # ── helpers ──────────────────────────────────────────────────────
