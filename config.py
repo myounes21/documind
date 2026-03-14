@@ -59,9 +59,9 @@ class Settings(BaseSettings):
     child_chunk_size: int = 250
 
     # retrieve pipline
-    retrieval_top_k : int = 10
+    retrieval_top_k : int = 12
     rrf_top_k: int = 10
-    rerank_top_k: int = 5
+    rerank_top_k: int = 3
 
 
     app_env: str = "development"

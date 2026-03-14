@@ -8,6 +8,7 @@ dependencies = [
     "cohere>=5.20.7",
     "elasticsearch>=9.3.0",
     "ipykernel>=7.2.0",
+    "langchain-core>=0.3.79",
     "openai>=2.26.0",
     "pydantic-settings>=2.13.1",
     "qdrant-client>=1.17.0",
