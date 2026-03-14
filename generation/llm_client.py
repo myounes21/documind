@@ -1,6 +1,6 @@
 from functools import cache
 from config import settings
-from prompt_templates import prompt
+from .prompt_templates import prompt
 
 
 @cache
