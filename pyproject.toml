@@ -9,6 +9,8 @@ dependencies = [
     "elasticsearch>=9.3.0",
     "ipykernel>=7.2.0",
     "langchain-core>=0.3.79",
+    "langchain-groq>=1.1.2",
+    "langchain-openai>=1.1.11",
     "openai>=2.26.0",
     "pydantic-settings>=2.13.1",
     "qdrant-client>=1.17.0",
@@ -22,6 +24,7 @@ dependencies = [
 dev = [
     "jupyter>=1.1.1",
     "pytest>=9.0.2",
+    "groq"
 ]
 
 [tool.pytest.ini_options]

@@ -12,7 +12,9 @@ class Settings(BaseSettings):
     cohere_api_key: str
 
     groq_llm_model: str = "llama-3.3-70b-versatile"
-    app_port: int = 8000
+    openai_llm_model: str = "gpt-4o-mini"
+
+    llm_provider: str = "groq"
 
     # Embedder
     openai_embedding_model: str = "text-embedding-3-small"
@@ -63,6 +65,7 @@ class Settings(BaseSettings):
     rrf_top_k: int = 10
     rerank_top_k: int = 3
 
+    app_port: int = 8000
 
     app_env: str = "development"
 
