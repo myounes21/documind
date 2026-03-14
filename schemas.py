@@ -23,5 +23,5 @@ class RetrievedChunk(BaseModel):
     metadata: ChunkMetadata
     parent_id: Optional[UUID] = None
     vector: Optional[list[float]] = None
-    score: float
+    score: Optional[float] = None
 
