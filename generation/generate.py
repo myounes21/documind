@@ -2,7 +2,7 @@ from typing import Generator
 from retrieval.retrieve import retrieve
 from .context_formatter import format_context
 from .streamer import stream
-from .memory import get_history, save_turn
+from .chat_history import get_history, save_turn
 
 
 def generate(query_text: str, session_id: str) -> Generator[str, None, None]:
