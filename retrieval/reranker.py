@@ -37,8 +37,8 @@ _RERANK_PROVIDERS = {
 }
 
 
-def rerank_chunks(query: str, chunks: list[RetrievedChunk], top_k: int = 5) -> list[RetrievedChunk]:
-    if not chunks:
+def rerank_chunks(query: str, rrf_chunks: list[RetrievedChunk], top_k: int) -> list[RetrievedChunk]:
+    if not rrf_chunks:
         return []
 
     rerank_fn = _RERANK_PROVIDERS.get(settings.rerank_provider)
@@ -48,7 +48,7 @@ def rerank_chunks(query: str, chunks: list[RetrievedChunk], top_k: int = 5) -> l
             f"Must be one of: {list(_RERANK_PROVIDERS.keys())}"
         )
 
-    ranked = rerank_fn(query, chunks)
+    ranked = rerank_fn(query, rrf_chunks)
     ranked.sort(key=lambda x: x[1], reverse=True)
     top = ranked[:top_k]
 

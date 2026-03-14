@@ -4,8 +4,8 @@ from schemas import RetrievedChunk
 def rrf(
     dense_results: list[RetrievedChunk],
     sparse_results: list[RetrievedChunk],
-    k: int = 60,
-    top_k: int = 5
+    top_k: int,
+    k: int = 60
 ) -> list[RetrievedChunk]:
     scores = {}  # chunk_id → rrf score
     chunks = {}  # chunk_id → RetrievedChunk object
