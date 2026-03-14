@@ -30,5 +30,6 @@ Output requirements:
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", _SYSTEM_PROMPT),
+    ("placeholder", "{chat_history}"),
     ("human", "{question}")
 ])
